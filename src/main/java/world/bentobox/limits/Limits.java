@@ -1,12 +1,8 @@
 package world.bentobox.limits;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import net.luckperms.api.LuckPerms;
 import org.bukkit.Material;
 import org.bukkit.World;
-
 import org.eclipse.jdt.annotation.Nullable;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
@@ -17,6 +13,12 @@ import world.bentobox.limits.commands.PlayerCommand;
 import world.bentobox.limits.listeners.BlockLimitsListener;
 import world.bentobox.limits.listeners.EntityLimitListener;
 import world.bentobox.limits.listeners.JoinListener;
+import world.bentobox.limits.listeners.LimitsPermChangeListener;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
@@ -40,6 +42,7 @@ public class Limits extends Addon {
 
     @Override
     public void onEnable() {
+        LuckPerms luckPerms = getServer().getServicesManager().load(LuckPerms.class);
         // Load the plugin's config
         saveDefaultConfig();
         // Load settings
@@ -63,6 +66,7 @@ public class Limits extends Addon {
         joinListener = new JoinListener(this);
         registerListener(joinListener);
         registerListener(new EntityLimitListener(this));
+        registerListener(new LimitsPermChangeListener(this, luckPerms));
         // Done
     }
 
@@ -134,7 +138,7 @@ public class Limits extends Addon {
     private void registerPlaceholders(GameModeAddon gm) {
         if (getPlugin().getPlaceholdersManager() == null) return;
         Arrays.stream(Material.values())
-                .filter(m -> m.isBlock())
+                .filter(Material::isBlock)
                 .forEach(m -> registerCountAndLimitPlaceholders(m, gm));
     }
 
@@ -171,7 +175,7 @@ public class Limits extends Addon {
         if (is == null) {
             return 0;
         }
-        return getBlockLimitListener().getIsland(gm.getIslands().getIsland(gm.getOverWorld(), user).getUniqueId()).
+        return Objects.requireNonNull(getBlockLimitListener().getIsland(Objects.requireNonNull(gm.getIslands().getIsland(gm.getOverWorld(), user)).getUniqueId())).
                 getBlockCount(m);
     }
 
@@ -186,7 +190,7 @@ public class Limits extends Addon {
         if (is == null) {
             return "Limit not set";
         }
-        int limit = getBlockLimitListener().getIsland(gm.getIslands().getIsland(gm.getOverWorld(), user).getUniqueId()).
+        int limit = Objects.requireNonNull(getBlockLimitListener().getIsland(Objects.requireNonNull(gm.getIslands().getIsland(gm.getOverWorld(), user)).getUniqueId())).
                 getBlockLimit(m);
         return limit == -1 ? "Limit not set" : String.valueOf(limit);
     }

@@ -3,6 +3,7 @@ gamemodes:
 - AcidIsland
 - BSkyBlock
 - CaveBlock
+- AOneBlock
 
 # Permissions
 # Island owners can be given permissions that override all general settings

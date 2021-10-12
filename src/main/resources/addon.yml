@@ -5,7 +5,7 @@ api-version: 1.18
 
 authors: tastybento
 
-softdepend: AcidIsland, BSkyBlock, CaveBlock
+softdepend: AcidIsland, BSkyBlock, CaveBlock, AOneBlock
 
 permissions:    
   '[gamemode].limits.player.limits':

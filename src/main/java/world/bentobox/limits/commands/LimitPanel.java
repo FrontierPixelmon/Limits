@@ -56,6 +56,7 @@ public class LimitPanel {
             // Update perms
             addon.getJoinListener().checkPerms(targetPlayer, gm.getPermissionPrefix() + "island.limit.", island.getUniqueId(), gm.getDescription().getName());
         }
+
         // Get the limits for this island
         IslandBlockCount ibc = addon.getBlockLimitListener().getIsland(island.getUniqueId());
         Map<Material, Integer> matLimits = addon.getBlockLimitListener().getMaterialLimits(world, island.getUniqueId());
